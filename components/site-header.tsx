@@ -22,9 +22,15 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function SiteHeader() {
   const router = useRouter()
+  // Access authentication state and user data from context
   const { user, isLoggedIn, logout } = useAuth()
+  // State for search input
   const [searchQuery, setSearchQuery] = useState("")
 
+  /**
+   * Handle search form submission
+   * Prevents default form behavior and navigates to search page with query parameter
+   */
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
@@ -32,6 +38,10 @@ export function SiteHeader() {
     }
   }
 
+  /**
+   * Handle user logout
+   * Calls logout function from auth context and redirects to homepage
+   */
   const handleLogout = () => {
     logout()
     router.push("/")
@@ -41,7 +51,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background overflow-hidden">
       <div className="container flex h-16 items-center justify-between py-4 px-4 md:px-6">
+        {/* Logo and mobile menu */}
         <div className="flex items-center gap-2">
+          {/* Mobile menu sheet - only visible on small screens */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="md:hidden">
@@ -51,10 +63,12 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="left">
               <div className="flex flex-col gap-6 py-6">
+                {/* Logo in mobile menu */}
                 <Link href="/" className="flex items-center gap-2">
                   <BookOpen className="h-6 w-6" />
                   <span className="text-xl font-bold">MangaVerse</span>
                 </Link>
+                {/* Mobile navigation links */}
                 <nav className="flex flex-col gap-4">
                   <Link href="/" className="text-sm font-medium hover:underline underline-offset-4">
                     Home
@@ -73,6 +87,7 @@ export function SiteHeader() {
                       Bookmarks
                     </Link>
                   )}
+                  {/* Authentication links - conditionally rendered based on login state */}
                   {!isLoggedIn ? (
                     <>
                       <Link href="/auth/login" className="text-sm font-medium hover:underline underline-offset-4">
@@ -95,11 +110,14 @@ export function SiteHeader() {
               </div>
             </SheetContent>
           </Sheet>
+          {/* Main logo */}
           <Link href="/" className="flex items-center gap-2">
             <BookOpen className="h-6 w-6" />
             <span className="text-xl font-bold">MangaVerse</span>
           </Link>
         </div>
+
+        {/* Desktop navigation - hidden on mobile */}
         <nav className="hidden md:flex items-center gap-6">
           <Link href="/" className="text-sm font-medium hover:underline underline-offset-4">
             Home
@@ -119,7 +137,10 @@ export function SiteHeader() {
             </Link>
           )}
         </nav>
+
+        {/* Right side controls: search, bookmarks, theme toggle, user menu */}
         <div className="flex items-center gap-1 sm:gap-4">
+          {/* Desktop search form - hidden on mobile */}
           <form onSubmit={handleSearch} className="hidden md:flex relative w-64">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -130,12 +151,16 @@ export function SiteHeader() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </form>
+
+          {/* Mobile search button */}
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link href="/search">
               <Search className="h-5 w-5 md:hidden" />
               <span className="sr-only">Search</span>
             </Link>
           </Button>
+
+          {/* Bookmarks button - only shown when logged in */}
           {isLoggedIn && (
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link href="/bookmarks">
@@ -144,8 +169,11 @@ export function SiteHeader() {
               </Link>
             </Button>
           )}
+
+          {/* Theme toggle button */}
           <ThemeToggle />
 
+          {/* User menu or sign in button based on authentication state */}
           {isLoggedIn ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -156,6 +184,7 @@ export function SiteHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {/* User info display */}
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
                     {user?.name && <p className="font-medium">{user.name}</p>}
@@ -163,6 +192,7 @@ export function SiteHeader() {
                   </div>
                 </div>
                 <DropdownMenuSeparator />
+                {/* User menu items */}
                 <DropdownMenuItem asChild>
                   <Link href="/profile">
                     <User className="mr-2 h-4 w-4" />

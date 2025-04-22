@@ -3,19 +3,28 @@ import { BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function SiteFooter() {
+  // Get current year for copyright notice
+  const currentYear = new Date().getFullYear()
+
   return (
     <footer className="border-t bg-background">
       <div className="container flex flex-col gap-6 py-8 md:py-12">
+        {/* Main footer content with logo, description, and navigation links */}
         <div className="flex flex-col md:flex-row justify-between gap-8">
+          {/* Logo, description, and social links */}
           <div className="space-y-4">
+            {/* Site logo and name */}
             <Link href="/" className="flex items-center gap-2">
               <BookOpen className="h-6 w-6" />
               <span className="text-xl font-bold">MangaVerse</span>
             </Link>
+            {/* Site description */}
             <p className="text-sm text-muted-foreground max-w-xs">
               Your ultimate destination for manga reading. Discover, read, and track your favorite manga series.
             </p>
+            {/* Social media links */}
             <div className="flex gap-4">
+              {/* Facebook */}
               <Button variant="ghost" size="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -33,6 +42,7 @@ export function SiteFooter() {
                 </svg>
                 <span className="sr-only">Facebook</span>
               </Button>
+              {/* Twitter */}
               <Button variant="ghost" size="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -50,6 +60,7 @@ export function SiteFooter() {
                 </svg>
                 <span className="sr-only">Twitter</span>
               </Button>
+              {/* Instagram */}
               <Button variant="ghost" size="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +80,7 @@ export function SiteFooter() {
                 </svg>
                 <span className="sr-only">Instagram</span>
               </Button>
+              {/* YouTube */}
               <Button variant="ghost" size="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +101,10 @@ export function SiteFooter() {
               </Button>
             </div>
           </div>
+
+          {/* Footer navigation links organized in columns */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {/* Explore links */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium">Explore</h4>
               <ul className="space-y-2">
@@ -115,6 +130,8 @@ export function SiteFooter() {
                 </li>
               </ul>
             </div>
+
+            {/* Account links */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium">Account</h4>
               <ul className="space-y-2">
@@ -140,6 +157,8 @@ export function SiteFooter() {
                 </li>
               </ul>
             </div>
+
+            {/* Support links */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium">Support</h4>
               <ul className="space-y-2">
@@ -165,6 +184,8 @@ export function SiteFooter() {
                 </li>
               </ul>
             </div>
+
+            {/* Legal links */}
             <div className="space-y-3">
               <h4 className="text-sm font-medium">Legal</h4>
               <ul className="space-y-2">
@@ -192,10 +213,10 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
+
+        {/* Copyright and attribution footer */}
         <div className="flex flex-col md:flex-row justify-between items-center border-t pt-8">
-          <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} MangaVerse. All rights reserved.
-          </p>
+          <p className="text-xs text-muted-foreground">&copy; {currentYear} MangaVerse. All rights reserved.</p>
           <p className="text-xs text-muted-foreground mt-4 md:mt-0">Designed with ❤️ for manga lovers</p>
         </div>
       </div>

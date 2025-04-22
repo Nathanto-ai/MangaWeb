@@ -1,0 +1,79 @@
+@startuml "Database Schema"
+
+entity "USERS" as users {
+  * id : string <<PK>>
+  --
+  * name : string
+  * email : string
+  * password_hash : string
+  * created_at : datetime
+  * updated_at : datetime
+}
+
+entity "MANGA" as manga {
+  * id : string <<PK>>
+  --
+  * title : string
+  * slug : string
+  * cover_url : string
+  * author : string
+  * artist : string
+  * rating : float
+  * status : string
+  * release_year : int
+  * synopsis : text
+  * created_at : datetime
+  * updated_at : datetime
+}
+
+entity "CHAPTERS" as chapters {
+  * id : string <<PK>>
+  --
+  * manga_id : string <<FK>>
+  * number : int
+  * title : string
+  * release_date : datetime
+  * views : int
+  * created_at : datetime
+  * updated_at : datetime
+}
+
+entity "GENRES" as genres {
+  * id : string <<PK>>
+  --
+  * name : string
+  * slug : string
+  * icon : string
+}
+
+entity "MANGA_GENRES" as manga_genres {
+  * manga_id : string <<FK>>
+  * genre_id : string <<FK>>
+}
+
+entity "BOOKMARKS" as bookmarks {
+  * id : string <<PK>>
+  --
+  * user_id : string <<FK>>
+  * manga_id : string <<FK>>
+  * created_at : datetime
+}
+
+entity "READING_HISTORY" as reading_history {
+  * id : string <<PK>>
+  --
+  * user_id : string <<FK>>
+  * chapter_id : string <<FK>>
+  * last_page : int
+  * last_read : datetime
+}
+
+users ||--o{ bookmarks : creates
+users ||--o{ reading_history : has
+manga ||--o{ chapters : contains
+manga ||--o{ manga_genres : has
+genres ||--o{ manga_genres : "belongs to"
+manga ||--o{ bookmarks : "bookmarked in"
+chapters ||--o{ reading_history : "read in"
+
+@enduml

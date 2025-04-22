@@ -1,0 +1,74 @@
+@startuml "Class Diagram - Main Components"
+
+class AuthContext {
+  +user: User|null
+  +isLoggedIn: boolean
+  +login(user: User): void
+  +logout(): void
+}
+
+class BookmarksContext {
+  +bookmarks: Manga[]
+  +isBookmarked(slug: string): boolean
+  +addBookmark(manga: Manga): void
+  +removeBookmark(slug: string): void
+  +toggleBookmark(manga: Manga): void
+}
+
+class User {
+  +name: string
+  +email: string
+}
+
+class Manga {
+  +title: string
+  +slug: string
+  +cover: string
+  +chapter: string
+  +rating: number
+  +genres: string[]
+}
+
+class MangaCard {
+  +title: string
+  +cover: string
+  +chapter: string
+  +rating: number
+  +genres: string[]
+  +updatedAt?: string
+  +isNew?: boolean
+  +trending?: boolean
+  +slug?: string
+  +handleBookmarkClick(): void
+}
+
+class ChapterList {
+  +chapters: Chapter[]
+  +mangaSlug: string
+}
+
+class Chapter {
+  +number: number
+  +title: string
+  +releaseDate: string
+  +views: number
+}
+
+class ReaderControls {
+  +chapters: Chapter[]
+  +currentChapter: number
+  +onChapterChange(): void
+  +isDoublePage: boolean
+  +toggleDoublePage(): void
+  +zoom: number
+  +onZoomChange(): void
+}
+
+BookmarksContext --> Manga : manages
+AuthContext --> User : manages
+MangaCard --> BookmarksContext : uses
+MangaCard --> AuthContext : uses
+ChapterList --> Chapter : displays
+ReaderControls --> Chapter : navigates
+
+@enduml

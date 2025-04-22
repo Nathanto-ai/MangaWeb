@@ -1,0 +1,28 @@
+@startuml "System Architecture"
+
+package "Frontend Application" {
+  [Pages (Next.js)] as Pages
+  [UI Components] as Components
+  [Context Providers] as Contexts
+  [Utility Functions] as Utils
+}
+
+cloud "External Services" {
+  [MangaDex API] as MangaDexAPI
+}
+
+database "State Management" {
+  [Local Storage] as LocalStorage
+}
+
+[Client Browser] as Client
+
+Client --> Pages : HTTP Requests
+Pages --> Components : Renders
+Pages --> Contexts : Uses
+Components --> Contexts : Uses
+Components --> Utils : Uses
+Contexts --> LocalStorage : Persists
+Pages --> MangaDexAPI : API Calls
+
+@enduml

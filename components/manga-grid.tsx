@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { SkeletonLoader } from "@/components/skeleton-loader"
 
 // Mock data - in a real app, this would come from an API
+// Each category contains an array of manga objects with relevant properties
 const MANGA_DATA = {
   popular: [
     {
@@ -280,20 +281,29 @@ interface MangaGridProps {
 }
 
 export function MangaGrid({ category }: MangaGridProps) {
+  // State for loading indicator when fetching more items
   const [isLoading, setIsLoading] = useState(false)
+  // State to store the current list of manga items
   const [items, setItems] = useState(MANGA_DATA[category])
 
+  /**
+   * Load more manga items
+   * In a real app, this would fetch the next page of results from an API
+   * Here it simulates loading by adding more items from the mock data after a delay
+   */
   const loadMore = () => {
     setIsLoading(true)
-    // Simulate loading more items
+    // Simulate loading more items with a timeout
     setTimeout(() => {
+      // Add more items from the mock data (in a real app, this would be new data from an API)
       setItems([...items, ...MANGA_DATA[category].slice(0, 6)])
       setIsLoading(false)
     }, 1000)
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full overflow-x-hidden">
+      {/* Responsive grid layout for manga cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
         {items.map((manga, index) => (
           <MangaCard
@@ -311,6 +321,7 @@ export function MangaGrid({ category }: MangaGridProps) {
         ))}
       </div>
 
+      {/* Loading skeleton placeholders shown during loading state */}
       {isLoading && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
           {[...Array(6)].map((_, i) => (
@@ -319,6 +330,7 @@ export function MangaGrid({ category }: MangaGridProps) {
         </div>
       )}
 
+      {/* Load more button */}
       <div className="flex justify-center">
         <Button variant="outline" onClick={loadMore} disabled={isLoading}>
           {isLoading ? "Loading..." : "Load More"}

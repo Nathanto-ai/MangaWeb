@@ -1,0 +1,25 @@
+@startuml "Authentication Flow"
+
+actor User
+participant "Login Page" as LoginPage
+participant "Auth Context" as AuthContext
+participant "Local Storage" as LocalStorage
+
+User -> LoginPage: Enter credentials
+LoginPage -> LoginPage: Validate input
+LoginPage -> AuthContext: login(userData)
+AuthContext -> LocalStorage: Store user data
+AuthContext -> AuthContext: Set isLoggedIn = true
+AuthContext -> LoginPage: Update UI state
+LoginPage -> User: Redirect to homepage
+
+note over User, LocalStorage: Logout Flow
+
+User -> SiteHeader: Click Logout
+SiteHeader -> AuthContext: logout()
+AuthContext -> LocalStorage: Remove user data
+AuthContext -> AuthContext: Set isLoggedIn = false
+AuthContext -> SiteHeader: Update UI state
+SiteHeader -> User: Show logged out state
+
+@enduml

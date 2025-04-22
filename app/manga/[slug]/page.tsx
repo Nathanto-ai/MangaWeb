@@ -21,17 +21,20 @@ interface MangaDetailPageProps {
 }
 
 export default function MangaDetailPage({ params }: MangaDetailPageProps) {
+  // Access bookmark functionality from context
   const { isBookmarked, toggleBookmark } = useBookmarks()
+  // Access authentication state from context
   const { isLoggedIn } = useAuth()
+  // State to prevent hydration mismatch with server/client rendering
   const [mounted, setMounted] = useState(false)
 
-  // Avoid hydration mismatch
+  // Set mounted state to true after component mounts to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // In a real app, you would fetch the manga data based on the slug
-  // For now, we'll use mock data
+  // Mock data for the manga details
+  // In a real app, this would be fetched from an API based on the slug
   const manga = {
     title: "One Piece",
     slug: "one-piece",
@@ -59,6 +62,10 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
     chapter: "Chapter 1088",
   }
 
+  /**
+   * Handle bookmark toggle
+   * Adds or removes the manga from bookmarks using the context function
+   */
   const handleToggleBookmark = () => {
     toggleBookmark({
       title: manga.title,
@@ -72,6 +79,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
 
   return (
     <>
+      {/* Head section for SEO and social sharing metadata */}
       <Head>
         <title>{`${manga.title} | MangaVerse`}</title>
         <meta name="description" content={manga.synopsis.substring(0, 160)} />
@@ -87,6 +95,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <div className="container px-4 py-8 md:px-6 md:py-12">
+          {/* Breadcrumb navigation */}
           <Breadcrumbs
             items={[
               { label: "Home", href: "/" },
@@ -95,8 +104,11 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
             ]}
           />
 
+          {/* Main content grid - sidebar and content layout on larger screens */}
           <div className="grid gap-8 md:grid-cols-[300px_1fr] lg:gap-12">
+            {/* Left sidebar with cover image and action buttons */}
             <div className="space-y-4">
+              {/* Cover image */}
               <div className="relative aspect-[2/3] overflow-hidden rounded-lg border">
                 <Image
                   src={manga.cover || "/placeholder.svg"}
@@ -107,6 +119,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
                 />
               </div>
 
+              {/* Action buttons */}
               <div className="flex flex-col gap-2">
                 <Button className="w-full" asChild>
                   <Link href={`/chapter/${params.slug}/1`}>
@@ -114,6 +127,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
                     Read First Chapter
                   </Link>
                 </Button>
+                {/* Bookmark button - only shown when logged in */}
                 {mounted && isLoggedIn && (
                   <Button
                     variant={isBookmarked(params.slug) ? "default" : "outline"}
@@ -126,6 +140,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
                 )}
               </div>
 
+              {/* Manga metadata card */}
               <div className="rounded-lg border p-4 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Status</span>
@@ -153,9 +168,12 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
               </div>
             </div>
 
+            {/* Main content area */}
             <div className="space-y-6">
+              {/* Title, genres, and synopsis */}
               <div>
                 <h1 className="text-3xl font-bold tracking-tight mb-2">{manga.title}</h1>
+                {/* Genre tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {manga.genres.map((genre) => (
                     <Link href={`/genres/${genre.toLowerCase().replace(/\s+/g, "-")}`} key={genre}>
@@ -165,9 +183,11 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
                     </Link>
                   ))}
                 </div>
+                {/* Synopsis */}
                 <p className="text-muted-foreground">{manga.synopsis}</p>
               </div>
 
+              {/* Chapters section */}
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold tracking-tight">Chapters</h2>
@@ -177,6 +197,7 @@ export default function MangaDetailPage({ params }: MangaDetailPageProps) {
                   </div>
                 </div>
 
+                {/* Chapter list component */}
                 <ChapterList chapters={manga.chapters} mangaSlug={params.slug} />
               </div>
             </div>

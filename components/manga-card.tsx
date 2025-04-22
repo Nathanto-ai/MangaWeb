@@ -18,11 +18,11 @@ export interface MangaCardProps {
   chapter: string
   rating: number
   genres: string[]
-  updatedAt?: string
-  isNew?: boolean
-  trending?: boolean
-  className?: string
-  slug?: string
+  updatedAt?: string // Optional timestamp for recently updated manga
+  isNew?: boolean // Flag for newly added manga
+  trending?: boolean // Flag for trending manga
+  className?: string // Additional CSS classes
+  slug?: string // URL slug for manga detail page
 }
 
 export function MangaCard({
@@ -37,16 +37,25 @@ export function MangaCard({
   className,
   slug,
 }: MangaCardProps) {
+  // Access bookmark functionality from context
   const { isBookmarked, toggleBookmark } = useBookmarks()
+  // Access authentication state from context
   const { isLoggedIn } = useAuth()
+  // State to prevent hydration mismatch with server/client rendering
   const [mounted, setMounted] = useState(false)
+  // State to track hover for showing/hiding bookmark button
   const [isHovered, setIsHovered] = useState(false)
 
-  // Avoid hydration mismatch
+  // Set mounted state to true after component mounts to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  /**
+   * Handle bookmark button click
+   * Prevents default link behavior and propagation
+   * Toggles bookmark status in the bookmarks context
+   */
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -72,6 +81,7 @@ export function MangaCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Cover image container with aspect ratio preservation */}
       <div className="relative aspect-[2/3] overflow-hidden">
         <Image
           src={cover || "/placeholder.svg"}
@@ -79,6 +89,7 @@ export function MangaCard({
           fill
           className="object-cover transition-transform group-hover:scale-105"
         />
+        {/* Bookmark button - only shown when logged in */}
         {mounted && isLoggedIn && (
           <Button
             variant="ghost"
@@ -95,6 +106,7 @@ export function MangaCard({
             <span className="sr-only">{isBookmarked(slug || "") ? "Remove from bookmarks" : "Add to bookmarks"}</span>
           </Button>
         )}
+        {/* Status badges - New, Trending, or Updated */}
         {isNew && (
           <Badge className="absolute left-2 top-2" variant="secondary">
             New
@@ -111,6 +123,7 @@ export function MangaCard({
           </Badge>
         )}
       </div>
+      {/* Manga information section */}
       <div className="flex flex-1 flex-col justify-between p-3">
         <div className="space-y-1">
           <h3 className="font-medium leading-tight line-clamp-1">{title}</h3>
@@ -122,6 +135,7 @@ export function MangaCard({
             <span className="text-xs">{rating.toFixed(1)}</span>
           </div>
         </div>
+        {/* Genre badges - limited to first 2 for space */}
         <div className="mt-2 flex flex-wrap gap-1">
           {genres.slice(0, 2).map((genre) => (
             <Badge key={genre} variant="outline" className="text-xs">
@@ -130,6 +144,7 @@ export function MangaCard({
           ))}
         </div>
       </div>
+      {/* Full card link - makes entire card clickable */}
       <Link href={`/manga/${slug || title.toLowerCase().replace(/\s+/g, "-")}`} className="absolute inset-0">
         <span className="sr-only">View {title}</span>
       </Link>

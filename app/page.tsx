@@ -7,12 +7,24 @@ import { MangaCard } from "@/components/manga-card"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
+// Add comprehensive comments to the homepage
+
+/**
+ * HomePage Component
+ *
+ * The main landing page of the MangaVerse application that showcases:
+ * - A hero section with a call-to-action
+ * - Tabbed browsing of manga categories (popular, recently updated, new releases, trending)
+ * - Genre exploration section
+ *
+ * This component uses server-side rendering for optimal SEO performance.
+ */
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero section */}
+        {/* Hero section - Main promotional area with CTA buttons */}
         <section className="w-full py-6 md:py-12 bg-muted/40">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12">
@@ -44,7 +56,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Explore section */}
+        {/* Explore section - Tabbed interface for browsing different manga categories */}
         <section className="w-full py-12">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -71,32 +83,34 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="w-full max-w-full">
+            <div className="w-full">
               <Tabs defaultValue="popular" className="w-full">
-                <div className="max-w-full">
-                  <TabsList className="mb-6 w-max max-w-full">
-                    <TabsTrigger value="popular" className="flex items-center gap-2">
+                {/* Horizontally scrollable tab list for category selection */}
+                <div className="overflow-x-auto pb-2 -mx-4 px-4">
+                  <TabsList className="mb-6 w-max min-w-full inline-flex">
+                    <TabsTrigger value="popular" className="flex items-center gap-2 whitespace-nowrap">
                       <Fire className="h-4 w-4" />
                       Popular
                     </TabsTrigger>
-                    <TabsTrigger value="updated" className="flex items-center gap-2">
+                    <TabsTrigger value="updated" className="flex items-center gap-2 whitespace-nowrap">
                       <Clock className="h-4 w-4" />
                       Recently Updated
                     </TabsTrigger>
-                    <TabsTrigger value="new" className="flex items-center gap-2">
+                    <TabsTrigger value="new" className="flex items-center gap-2 whitespace-nowrap">
                       <Star className="h-4 w-4" />
                       New Releases
                     </TabsTrigger>
-                    <TabsTrigger value="trending" className="flex items-center gap-2">
+                    <TabsTrigger value="trending" className="flex items-center gap-2 whitespace-nowrap">
                       <TrendingUp className="h-4 w-4" />
                       Trending
                     </TabsTrigger>
                   </TabsList>
                 </div>
 
-                {/* Popular tab content */}
+                {/* Popular tab content - Grid of popular manga cards */}
                 <TabsContent value="popular" className="space-y-6">
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                    {/* Manga cards with responsive display logic - fewer cards on mobile, more on larger screens */}
                     <MangaCard
                       title="One Piece"
                       cover="/placeholder.svg?height=320&width=240"
@@ -403,7 +417,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Genres section */}
+        {/* Genres section - Grid of genre categories for exploration */}
         <section className="w-full py-12 bg-muted/40">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -417,6 +431,7 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {/* Genre cards with icons representing each genre */}
               <Link
                 href="/genres/action"
                 className="group relative overflow-hidden rounded-lg bg-muted hover:bg-muted/80 transition-colors"

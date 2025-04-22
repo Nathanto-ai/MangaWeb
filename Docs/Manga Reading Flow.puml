@@ -1,0 +1,37 @@
+@startuml "Manga Reading Flow"
+
+actor User
+participant "Home Page" as HomePage
+participant "Manga Detail Page" as MangaDetailPage
+participant "Chapter Reader Page" as ChapterReaderPage
+participant "Bookmarks Context" as BookmarksContext
+participant "Local Storage" as LocalStorage
+
+User -> HomePage: Browse manga
+HomePage -> User: Display manga cards
+User -> MangaDetailPage: Select manga
+MangaDetailPage -> User: Show manga details and chapters
+
+alt User bookmarks manga
+    User -> MangaDetailPage: Click bookmark
+    MangaDetailPage -> BookmarksContext: toggleBookmark(manga)
+    BookmarksContext -> LocalStorage: Update bookmarks
+    BookmarksContext -> MangaDetailPage: Update UI
+end
+
+User -> ChapterReaderPage: Select chapter
+ChapterReaderPage -> User: Display chapter pages
+
+alt User changes reading mode
+    User -> ChapterReaderPage: Toggle double page mode
+    ChapterReaderPage -> ChapterReaderPage: Update display mode
+    ChapterReaderPage -> User: Refresh view
+end
+
+alt User navigates pages
+    User -> ChapterReaderPage: Next/Previous page
+    ChapterReaderPage -> ChapterReaderPage: Update current page
+    ChapterReaderPage -> User: Show new page
+end
+
+@enduml

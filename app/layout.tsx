@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/context/auth-context"
 import { BookmarksProvider } from "@/context/bookmarks-context"
 
+// Global metadata for the site
+// These values are used for SEO and social sharing
 export const metadata = {
   title: {
     default: "MangaVerse - Discover and Read Manga Online",
@@ -37,6 +39,17 @@ export const metadata = {
   },
 }
 
+/**
+ * RootLayout Component
+ *
+ * Wraps the entire application with necessary providers:
+ * - ThemeProvider: For light/dark mode support
+ * - AuthProvider: For authentication state
+ * - BookmarksProvider: For bookmark management
+ *
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to render
+ */
 export default function RootLayout({
   children,
 }: {
@@ -45,8 +58,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        {/* Theme provider with dark mode as default */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          {/* Authentication provider */}
           <AuthProvider>
+            {/* Bookmarks provider */}
             <BookmarksProvider>{children}</BookmarksProvider>
           </AuthProvider>
         </ThemeProvider>
